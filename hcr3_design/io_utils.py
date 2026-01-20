@@ -1,3 +1,4 @@
+import os
 from .utils import amp, BOLD, END
 
 def write_probe_fasta(seqs, outfile, name=None):
@@ -16,20 +17,18 @@ def write_probe_fasta(seqs, outfile, name=None):
     """
     if not seqs:
         print("No probes to write. FASTA not created.")
-        return
+        return None
 
-    # Normalize to list
-    if isinstance(seqs, dict):
-        probes = list(seqs.values())
-    else:
-        probes = seqs
+    probes = list(seqs.values()) if isinstance(seqs, dict) else seqs
 
     with open(outfile, "w") as f:
-        for i, p in enumerate(probes):
-            header = f"{name}_{i+1}" if name else str(i+1)
-            f.write(f">{header}\n{p[1]}\n")
+        for p in probes:
+            probe_id = p[3]  # <-- critical
+            f.write(f">{probe_id}\n{p[1]}\n")
 
-    print(f"FASTA written: {outfile}")
+    abs_path = os.path.abspath(outfile)
+    print(f"FASTA written: {abs_path}")
+    return abs_path
 
 def print_table(columns, rows, pad=2):
     widths = [

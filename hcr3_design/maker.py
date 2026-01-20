@@ -1,3 +1,4 @@
+from .utils import amp
 from .design import limit_probes_evenly, blast_filter
 from .io_utils import write_probe_fasta, output
 from Bio.Seq import Seq
@@ -9,14 +10,6 @@ def maker(name, fullseq, amplifier, pause, polyAT, polyCG, BlastProbes, target_o
     pd.set_option('display.max_columns', 500)
     pd.set_option('display.max_rows',5000)
     pd.set_option('display.width', 80)
-
-    BOLD = '\033[1m'
-    END = '\033[0m'
-    tab = "\t"
-    
-    
-
-    
 
     name = str(name)
     fullseq = str(Seq(fullseq).reverse_complement())

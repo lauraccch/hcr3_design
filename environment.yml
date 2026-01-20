@@ -2,10 +2,11 @@ name: HCR_design
 channels:
   - conda-forge
   - bioconda
-conda:
+dependencies:
   - python=3.13
-pip:
-  - numpy==2.3.2
-  - pandas==2.3.2
-  - biopython==1.85
-  - jupyterlab==4.5.0
+  - pip
+  - pip:
+      - numpy==2.3.2
+      - pandas==2.3.2
+      - biopython==1.85
+      - jupyterlab==4.5.0
