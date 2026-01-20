@@ -3,3 +3,5 @@
 
 # Ignore Python cache
 __pycache__/
+
+hcr3_design.egg-info/
