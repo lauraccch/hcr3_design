@@ -32,12 +32,12 @@ After installation, if necessary, add the path for the blastn binary to your pat
 
 # Usage
 
-1. Import the package modules in your notebooks or scripts:
+1. **Import the package modules in your notebooks or scripts:**
 
 ```python
 from hcr3_design import maker
 ```
-2. Inputs
+2. **Inputs:**
 
 ```python
 name = "gene_name"
@@ -55,14 +55,38 @@ amplifier = "B2"
 pause = 10
 ```
 -> the number of nucleotides that should be skipped in the beginning and end of the gene (no probes designed for the first and last x nucleotides)
-- polyAT = 4 -> the maximum allowed number of consecutive As or Ts
-- polyCG = 4 -> the maximum allowed number of consecutive Cs or Gs
-- numbr = 30 -> the maximum number of probe pairs that should be designed
-- BlastProbes = "y" -> if you want the probes to be blasted ('Y') or not ('N')
-- target_organism_db = "/home/user/.../complete_genome.fasta" -> path for the complete genome sequence for the organism that contains the gene that will be targeted
-- background_organism_db = "/home/user /.../complete_genome.fasta" -> path for the complete genome of the second organism that will be present in the sample, but does not contain the sequence that is targeted with FISH
-- dropout = "Y" -> if bad probes should be removed ('Y') or not ('N')
-- report = "Y" -> if in the end a summary of used inputs etc should be given ('Y') or not ('N')
+```python
+polyAT = 4
+```
+-> the maximum allowed number of consecutive As or Ts
+```python
+polyCG = 4
+```
+-> the maximum allowed number of consecutive Cs or Gs
+```python
+numbr = 30
+```
+-> the maximum number of probe pairs that should be designed
+```python
+BlastProbes = "y"
+```
+-> if you want the probes to be blasted ('Y') or not ('N')
+```python
+target_organism_db = "/home/user/.../complete_genome.fasta"
+```
+-> path for the complete genome sequence for the organism that contains the gene that will be targeted
+```python
+background_organism_db = "/home/user /.../complete_genome.fasta"
+```
+-> path for the complete genome of the second organism that will be present in the sample, but does not contain the sequence that is targeted with FISH
+```python
+dropout = "Y"
+```
+-> if bad probes should be removed ('Y') or not ('N')
+```python
+report = "Y"
+```
+-> if in the end a summary of used inputs etc should be given ('Y') or not ('N')
 
 # Output Files
 
