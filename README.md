@@ -43,9 +43,18 @@ from hcr3_design import maker
 name = "gene_name"
 ```
 -> specify the name of the target gene
-- fullseq = "ATG[...]" -> enter the sequence of your target gene
-- amplifier = "B2" -> select the HCR amplifier you want to use
-- pause = 10 -> the number of nucleotides that should be skipped in the beginning and end of the gene (no probes designed for the first and last x nucleotides)
+```python
+fullseq = "ATG[...]"
+```
+-> enter the sequence of your target gene
+```python
+amplifier = "B2"
+```
+-> select the HCR amplifier you want to use
+```python
+pause = 10
+```
+-> the number of nucleotides that should be skipped in the beginning and end of the gene (no probes designed for the first and last x nucleotides)
 - polyAT = 4 -> the maximum allowed number of consecutive As or Ts
 - polyCG = 4 -> the maximum allowed number of consecutive Cs or Gs
 - numbr = 30 -> the maximum number of probe pairs that should be designed
