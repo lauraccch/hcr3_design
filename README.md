@@ -1,33 +1,36 @@
-# HCR3 Probe Design Package
-
-## Overview
+# Overview
 
 This package provides tools for designing HCR probe sets, filtering them via BLAST, and generating final probe sequences in FASTA and TSV formats.
 
 
-## Installation
+# Installation
 
-1. **Clone this GitHub repository**:
+1. **Clone this GitHub repository:**
 
 ```bash
 git clone https://github.com/lauraccch/hcr3_design.git
 cd hcr3_design
 ```
 
-2. **Create and activate a conda environment** with Python 3.13:
+2. **Create and activate a conda environment:**
 
 ```bash
 conda create -n HCR_design python=3.13
 conda activate HCR_design
 ```
 
-3. **Install the package**:
+3. **Install the package:**
 
 ```bash
 pip install -e .
 ```
 
-## Usage
+4. **Install BLAST:**
+
+This package relies on NCBI BLAST for probe filtering. Install BLAST+ separately by following the installtion instructions here: https://www.ncbi.nlm.nih.gov/books/NBK52640/
+After installation, if necessary, add the path for the blastn binary to your path.
+
+# Usage
 
 Import the package modules in your notebooks or scripts:
 
@@ -37,9 +40,9 @@ maker()
 ```
 
 
-## Output Files
+# Output Files
 
-### FASTA Files
+## FASTA Files
 
 * **prelim_probes.fa**: All probe sequences initially designed, **before** BLAST filtering and probe number limitation.
 * **probes.fa**: Probes after BLAST filtering and final number limitation.
@@ -47,7 +50,7 @@ maker()
 > Both FASTA files contain only the sequences that hybridize to the target (with `NN` in the middle).
 > When manually performing BLAST, use `blastn`. The sequences will show in the **opposite direction** compared to the gene.
 
-### TSV Files
+## TSV Files
 
 * Contain the results of BLAST searches.
 * If there are multiple TSV files, this indicates probes were blasted against multiple organisms (e.g., the target organism and another present in the sample).
