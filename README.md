@@ -15,7 +15,7 @@ cd hcr3_design
 2. **Create and activate a conda environment:**
 
 ```bash
-conda create -n HCR_design python=3.13
+conda env create -n HCR_design -f environment.yml
 conda activate HCR_design
 ```
 
@@ -27,7 +27,7 @@ pip install -e .
 
 4. **Install BLAST:**
 
-This package relies on NCBI BLAST for probe filtering. Install BLAST+ separately by following the installtion instructions here: https://www.ncbi.nlm.nih.gov/books/NBK52640/
+This package relies on NCBIs BLAST+ for probe filtering. Install BLAST+ separately by following the installtion instructions here: https://www.ncbi.nlm.nih.gov/books/NBK52640/.
 After installation, if necessary, add the path for the blastn binary to your path.
 
 # Usage
@@ -107,4 +107,3 @@ report = "Y"
 ## To DO
 - create ready-to-order output file (oPool)
 - remove show parameter
--
