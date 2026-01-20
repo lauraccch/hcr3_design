@@ -40,7 +40,9 @@ from hcr3_design import maker
 2. Inputs
 
 ```python
-name = "gene_name"``` -> specify the name of the target gene
+name = "gene_name"
+```
+-> specify the name of the target gene
 - fullseq = "ATG[...]" -> enter the sequence of your target gene
 - amplifier = "B2" -> select the HCR amplifier you want to use
 - pause = 10 -> the number of nucleotides that should be skipped in the beginning and end of the gene (no probes designed for the first and last x nucleotides)
