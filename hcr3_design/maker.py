@@ -1,6 +1,6 @@
 from .utils import amp
 from .design import limit_probes_evenly, blast_filter
-from .io_utils import write_probe_fasta, output
+from .io_utils import write_probe_fasta, output, print_idt_order
 from Bio.Seq import Seq
 import numpy as np
 import pandas as pd
@@ -80,6 +80,7 @@ def maker(name, fullseq, amplifier, pause, polyAT, polyCG, BlastProbes, target_o
     g = Seq(''.join(graphic)).reverse_complement()
 
     output(cdna, g, fullseq, count, amplifier, name, seqs)
+    print_idt_order(seqs, name, upinit, uspc, dspc, dninit, amplifier)
 
     # Report
     if report == 'y':

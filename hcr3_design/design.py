@@ -80,7 +80,7 @@ def blast_filter(seqs, name, target_organism_db, out_prefix_target, out_prefix_b
                 f.write(stdout_bg)
         blast_bg = np.genfromtxt(io.StringIO(stdout_bg), delimiter="\t", dtype=dt)
         for row in blast_bg:
-            qcovs = row[11]
+            qcovs = row[12]
             evalue = row[10]
             if qcovs >= background_max_cov and evalue <= background_max_e:
                 bad_bg.add(row[0])

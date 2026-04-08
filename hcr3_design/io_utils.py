@@ -74,3 +74,27 @@ def output(cdna, g, fullseq, count, amplifier, name, seqs):
     print(f">{name} Sense Strand\n{g}")
     print(f"\n{BOLD}Anti-sense sequence used to create probes:{END}\n")
     print(f">{name} Anti-Sense Strand\n{fullseq}\n")
+
+def print_idt_order(seqs, target_name, upinit, uspc, dspc, dninit, amplifier):
+    """
+    Print sequences formatted for direct IDT ordering, including amplifier in the pool name.
+    """
+
+    full_name = f"{target_name}_{amplifier}"
+
+    print(f"{BOLD}\nIDT ordering format:\n{END}")
+
+    for row in seqs:
+
+        full_probe = row[1]
+
+        if "NN" not in full_probe:
+            continue
+
+        right_probe, left_probe = full_probe.split("NN")
+
+        left_seq  = upinit + uspc + left_probe
+        right_seq = right_probe + dspc + dninit
+
+        print(f"{full_name},{left_seq}")
+        print(f"{full_name},{right_seq}")
