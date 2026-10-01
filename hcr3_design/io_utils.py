@@ -1,5 +1,30 @@
 import os
 from .utils import amp, BOLD, END
+from openpyxl import Workbook
+from openpyxl.styles import Font
+
+def write_idt_xlsx(seqs, name, amplifier, upinit, uspc, dspc, dninit):
+    pool_name = f"{name}_{amplifier}"
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Sheet1"
+    ws.append(["Pool name", "Sequence"])
+
+    for probe in seqs:  # seqs is a list here, not a dict
+        arm1, arm2 = probe[1].split("NN")
+        ws.append([pool_name, f"{upinit}{uspc}{arm1}"])
+        ws.append([pool_name, f"{arm2}{dspc}{dninit}"])
+
+    for row in ws.iter_rows():
+        for cell in row:
+            cell.font = Font(name="Arial", size=10)
+
+    ws.column_dimensions["A"].width = 23.08
+    ws.column_dimensions["B"].width = 64.05
+
+    output_path = f"{name}_{amplifier}_IDT.xlsx"
+    wb.save(output_path)
+    print(f"IDT Excel file written: {output_path}")
 
 def write_probe_fasta(seqs, outfile, name=None):
     """

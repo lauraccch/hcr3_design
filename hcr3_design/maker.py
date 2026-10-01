@@ -1,6 +1,6 @@
 from .utils import amp
 from .design import limit_probes_evenly, blast_filter
-from .io_utils import write_probe_fasta, output, print_idt_order
+from .io_utils import write_probe_fasta, output, print_idt_order, write_idt_xlsx
 from Bio.Seq import Seq
 from Bio.SeqUtils import MeltingTemp as mt
 import numpy as np
@@ -118,6 +118,7 @@ def maker(name, fullseq, amplifier, pause, polyAT, polyCG, BlastProbes, target_o
 
     output(cdna, g, fullseq, count, amplifier, name, seqs)
     print_idt_order(seqs, name, upinit, uspc, dspc, dninit, amplifier)
+    write_idt_xlsx(seqs, name, amplifier, upinit, uspc, dspc, dninit)
 
     # Report
     if report == 'y':
