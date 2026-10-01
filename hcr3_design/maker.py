@@ -2,11 +2,26 @@ from .utils import amp
 from .design import limit_probes_evenly, blast_filter
 from .io_utils import write_probe_fasta, output, print_idt_order
 from Bio.Seq import Seq
+from Bio.SeqUtils import MeltingTemp as mt
 import numpy as np
 import pandas as pd
 from datetime import date
 
-def maker(name, fullseq, amplifier, pause, polyAT, polyCG, BlastProbes, target_organism_db, background_organism_db, dropout, show, report, numbr):
+
+def arm_tm_hybrid(dna_arm, Na, dnac1, dnac2, formamide):
+    # R_DNA_NN1 expects the RNA strand; the probe arm is DNA.
+    rna_target = str(Seq(dna_arm).reverse_complement().transcribe())
+    tm_nn = mt.Tm_NN(
+        rna_target,
+        Na=Na,
+        dnac1=dnac1,
+        dnac2=dnac2,
+        nn_table=mt.R_DNA_NN1,
+    )
+    return mt.chem_correction(tm_nn, fmd=formamide)
+
+
+def maker(name, fullseq, amplifier, pause, polyAT, polyCG, BlastProbes, target_organism_db, background_organism_db, dropout, show, report, numbr, min_arm_tm=30, Na=975, formamide=30, dnac1=4, dnac2=0):
     pd.set_option('display.max_columns', 500)
     pd.set_option('display.max_rows',5000)
     pd.set_option('display.width', 80)
@@ -66,6 +81,28 @@ def maker(name, fullseq, amplifier, pause, polyAT, polyCG, BlastProbes, target_o
         
         seqs = blast_filter(seqs, name, target_organism_db, out_prefix_target, out_prefix_bg, background_organism_db=background_organism_db, target_min_cov=95.0, target_min_id=95.0, target_max_e=1e-13, background_max_cov=60.0, background_max_e=1e-12, save_outputs=True)
 
+    # filter probe pairs by melting temperature
+    if min_arm_tm is not None:
+        n_before_tm = len(seqs)
+        tm_filtered = {}
+    
+        for key, probe in seqs.items():
+            arms = probe[1].split("NN")
+            if len(arms) != 2 or not all(arms):
+                continue
+    
+            tm1 = arm_tm_hybrid(arms[0], Na, dnac1, dnac2, formamide)
+            tm2 = arm_tm_hybrid(arms[1], Na, dnac1, dnac2, formamide)
+    
+            if tm1 >= min_arm_tm and tm2 >= min_arm_tm:
+                tm_filtered[key] = probe
+    
+        seqs = tm_filtered
+        print(
+            f"Probe pairs passing arm Tm cutoff ({min_arm_tm}°C): "
+            f"{len(seqs)} of {n_before_tm}"
+        )
+    
     # limit number of probes evenly and write to fasta
     numbr = min(numbr, len(seqs))
     seqs = limit_probes_evenly(seqs, numbr)

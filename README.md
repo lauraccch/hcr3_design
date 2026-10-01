@@ -87,6 +87,26 @@ dropout = "Y"
 report = "Y"
 ```
 -> if in the end a summary of used inputs etc should be given ('Y') or not ('N')
+```python
+min_arm_tm=30
+```
+-> temperture cutoff to filter out probes (°C)
+```python
+Na=975
+```
+-> Na+ concentration in mM to calculate the melting temperature
+```python
+formamide=30
+```
+-> formamide concentration in % to calculate the melting temperature
+```python
+dnac1=4
+```
+-> probe concentration in nM to calculate the melting temperature
+```python
+dnac2=0
+```
+-> target concentration in nM to calculate the melting temperature (negligible compared to the probe -> defaults to 0)
 
 # Output Files
 
