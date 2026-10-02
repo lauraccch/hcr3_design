@@ -6,27 +6,48 @@ from openpyxl.styles import Font
 def write_idt_fasta(seqs, name, amplifier, upinit, uspc, dspc, dninit):
     pool_name = f"{name}_{amplifier}"
     records = []
-    for i, probe in enumerate(seqs):
-        arm1, arm2 = probe[1].split("NN")
-        records.append(f">{pool_name}_{i+1}_1\n{upinit}{uspc}{arm1}")
-        records.append(f">{pool_name}_{i+1}_2\n{arm2}{dspc}{dninit}")
-    
+
+    for i, probe in enumerate(seqs, start=1):
+        raw_arm1, raw_arm2 = probe[1].split("NN")
+
+        # Target-facing order is raw_arm2 -> raw_arm1
+        left_arm = raw_arm2
+        right_arm = raw_arm1
+
+        records.append(
+            f">{pool_name}_{i}_1\n"
+            f"{upinit}{uspc}{left_arm}"
+        )
+        records.append(
+            f">{pool_name}_{i}_2\n"
+            f"{right_arm}{dspc}{dninit}"
+        )
+
     output_path = f"{name}_{amplifier}_IDT.fa"
+
     with open(output_path, "w") as f:
         f.write("\n".join(records) + "\n")
+
     print(f"IDT FASTA written: {output_path}")
 
 def write_idt_xlsx(seqs, name, amplifier, upinit, uspc, dspc, dninit):
+    from openpyxl import Workbook
+    from openpyxl.styles import Font
+
     pool_name = f"{name}_{amplifier}"
+
     wb = Workbook()
     ws = wb.active
     ws.title = "Sheet1"
     ws.append(["Pool name", "Sequence"])
 
-    for probe in seqs:  # seqs is a list here, not a dict
-        arm1, arm2 = probe[1].split("NN")
-        ws.append([pool_name, f"{upinit}{uspc}{arm1}"])
-        ws.append([pool_name, f"{arm2}{dspc}{dninit}"])
+    for probe in seqs:
+        raw_arm1, raw_arm2 = probe[1].split("NN")
+        left_arm = raw_arm2
+        right_arm = raw_arm1
+
+        ws.append([pool_name, f"{upinit}{uspc}{left_arm}"])
+        ws.append([pool_name, f"{right_arm}{dspc}{dninit}"])
 
     for row in ws.iter_rows():
         for cell in row:
@@ -115,7 +136,8 @@ def output(cdna, g, fullseq, count, amplifier, name, seqs):
 
 def print_idt_order(seqs, target_name, upinit, uspc, dspc, dninit, amplifier):
     """
-    Print sequences formatted for direct IDT ordering, including amplifier in the pool name.
+    Print sequences formatted for direct IDT ordering.
+    Amplifier overhangs are placed toward the inner gap of the probe pair.
     """
 
     full_name = f"{target_name}_{amplifier}"
@@ -123,15 +145,18 @@ def print_idt_order(seqs, target_name, upinit, uspc, dspc, dninit, amplifier):
     print(f"{BOLD}\nIDT ordering format:\n{END}")
 
     for row in seqs:
-
         full_probe = row[1]
 
         if "NN" not in full_probe:
             continue
 
-        right_probe, left_probe = full_probe.split("NN")
+        raw_arm1, raw_arm2 = full_probe.split("NN")
 
-        left_seq  = upinit + uspc + left_probe
+        # Target-facing order is raw_arm2 -> raw_arm1
+        left_probe = raw_arm2
+        right_probe = raw_arm1
+
+        left_seq = upinit + uspc + left_probe
         right_seq = right_probe + dspc + dninit
 
         print(f"{full_name},{left_seq}")
