@@ -1,6 +1,6 @@
 from .utils import amp
 from .design import limit_probes_evenly, blast_filter
-from .io_utils import write_probe_fasta, output, print_idt_order, write_idt_xlsx
+from .io_utils import write_probe_fasta, output, print_idt_order, write_idt_xlsx, write_idt_fasta
 from Bio.Seq import Seq
 from Bio.SeqUtils import MeltingTemp as mt
 import numpy as np
@@ -22,6 +22,7 @@ def arm_tm_hybrid(dna_arm, Na, dnac1, dnac2, formamide):
 
 
 def maker(name, fullseq, amplifier, pause, polyAT, polyCG, BlastProbes, target_organism_db, background_organism_db, dropout, show, report, numbr, min_arm_tm=30, Na=975, formamide=30, dnac1=4, dnac2=0):
+    print("\n", "#" * 120, "\n")
     pd.set_option('display.max_columns', 500)
     pd.set_option('display.max_rows',5000)
     pd.set_option('display.width', 80)
@@ -107,7 +108,7 @@ def maker(name, fullseq, amplifier, pause, polyAT, polyCG, BlastProbes, target_o
     numbr = min(numbr, len(seqs))
     seqs = limit_probes_evenly(seqs, numbr)
     count = str(len(seqs))
-    write_probe_fasta(seqs, f"{name}_final_probes.fa", name=name)
+    write_probe_fasta(seqs, f"{name}_final_hyb_seqs.fa", name=name)
 
     # --- Build in-place localization ---
     graphic = ['n'] * cdna
@@ -117,8 +118,9 @@ def maker(name, fullseq, amplifier, pause, polyAT, polyCG, BlastProbes, target_o
     g = Seq(''.join(graphic)).reverse_complement()
 
     output(cdna, g, fullseq, count, amplifier, name, seqs)
-    print_idt_order(seqs, name, upinit, uspc, dspc, dninit, amplifier)
+    #print_idt_order(seqs, name, upinit, uspc, dspc, dninit, amplifier)
     write_idt_xlsx(seqs, name, amplifier, upinit, uspc, dspc, dninit)
+    write_idt_fasta(seqs, name, amplifier, upinit, uspc, dspc, dninit)
 
     # Report
     if report == 'y':

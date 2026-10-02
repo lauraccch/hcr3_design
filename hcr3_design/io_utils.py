@@ -3,6 +3,19 @@ from .utils import amp, BOLD, END
 from openpyxl import Workbook
 from openpyxl.styles import Font
 
+def write_idt_fasta(seqs, name, amplifier, upinit, uspc, dspc, dninit):
+    pool_name = f"{name}_{amplifier}"
+    records = []
+    for i, probe in enumerate(seqs):
+        arm1, arm2 = probe[1].split("NN")
+        records.append(f">{pool_name}_{i+1}_1\n{upinit}{uspc}{arm1}")
+        records.append(f">{pool_name}_{i+1}_2\n{arm2}{dspc}{dninit}")
+    
+    output_path = f"{name}_{amplifier}_IDT.fa"
+    with open(output_path, "w") as f:
+        f.write("\n".join(records) + "\n")
+    print(f"IDT FASTA written: {output_path}")
+
 def write_idt_xlsx(seqs, name, amplifier, upinit, uspc, dspc, dninit):
     pool_name = f"{name}_{amplifier}"
     wb = Workbook()

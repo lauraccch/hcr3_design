@@ -1,6 +1,6 @@
 # Overview
 
-This package provides tools for designing HCR probe sets, filtering them via BLAST, and generating final probe sequences in FASTA and TSV formats.
+This package provides tools for designing HCR probe sets, filtering them via BLAST and melting temperature, selecting evenly spaced probe pairs, and generating final probe sequences in FASTA and IDT-compatible XLSX formats.
 
 
 # Installation
@@ -70,13 +70,13 @@ numbr = 30
 ```python
 BlastProbes = "y"
 ```
--> if you want the probes to be blasted ('Y') or not ('N')
+-> if you want the probes to be blasted ('y') or not ('n')
 ```python
 target_organism_db = "/home/user/.../complete_genome.fasta"
 ```
 -> path for the complete genome sequence for the organism that contains the gene that will be targeted
 ```python
-background_organism_db = "/home/user /.../complete_genome.fasta"
+background_organism_db = "/home/user/.../complete_genome.fasta"
 ```
 -> path for the complete genome of the second organism that will be present in the sample, but does not contain the sequence that is targeted with FISH
 ```python
@@ -90,7 +90,7 @@ report = "Y"
 ```python
 min_arm_tm=30
 ```
--> temperture cutoff to filter out probes (°C)
+-> temperature cutoff to filter out probes (°C)
 ```python
 Na=975
 ```
@@ -111,19 +111,17 @@ dnac2=0
 # Output Files
 
 ## FASTA Files
-
-* **prelim_probes.fa**: All probe sequences initially designed, **before** BLAST filtering and probe number limitation.
-* **probes.fa**: Final selected probes after BLAST filtering and number limitation.
-
-> Both FASTA files contain only the sequences that will hybridize to the target (with `NN` in the middle), not the amplifiers
-> When manually performing BLAST, use `blastn`. The sequences will show in the **opposite direction** compared to the gene.
+* **<name>_final_hyb_seqs.fa**: RNA-hybridizing regions of the BLASTed and temperature-filtered probes. The regions of the 2 splits are separated by "NN", so if you BLAST these manually again, choose the blastn algorithm for somewhat similar sequences. When looking at the graphical result, the sequences will show in the **opposite direction** compared to the gene.
+* **<name>_<amplifier>_final_probes.fa**: final probes with amplifier sequences attached. If you BLAST these manually again to double check orientation etc, choose the discontiguous megablast algorithm for more dissimilar sequences
 
 ## TSV Files
+Contain the detailed results of BLAST searches. If there are multiple TSV files, this indicates probes were blasted against multiple organisms (e.g., the target organism and another present in the sample).
+* **_blast_target_<target_organism>.tsv**: BLAST results of the probes against the target organism (organism containing the gene)
+* **_blast_background_<bg_organism>.tsv**: BLAST results of the probes against the background organism, if specified
 
-* Contain the detailed results of BLAST searches.
-* If there are multiple TSV files, this indicates probes were blasted against multiple organisms (e.g., the target organism and another present in the sample).
+## Excel Files
+* * **<name>_<amplifier>_IDT.xlsx**: final probes in IDT ordering format
 
 
 ## To DO
-- create ready-to-order output file (oPool)
 - remove show parameter

@@ -28,7 +28,7 @@ def blast_filter(seqs, name, target_organism_db, out_prefix_target, out_prefix_b
     if background_organism_db is None:
         print("No Database for Background Organism BLAST was given. BLASTing only against Target Organism")
 
-    # Write probe fasta
+    # Write probe fasta (needed for BLASTing afterwards)
     fasta_file = write_probe_fasta(seqs, f"{name}_prelim_probes.fa", name=name)
     
     
